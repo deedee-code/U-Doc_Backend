@@ -2,7 +2,6 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const app = express();
-const User = require("../config/authModel");
 const secretKey = process.env.SECRET_KEY || 'defaultSecretKey';
 const Patient = require("../config/patientModels");
 const Medics = require("../config/medicalProfessionalModel");
