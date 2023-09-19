@@ -17,14 +17,14 @@ const registerUser = async (req, res) => {
     return res.status(400).json({ message: "All fields are required" })
   }
 
-  const user = await User.findOne({ email })
+  const user = await Patient.findOne({ email })
   if (user) {
     return res.sttus(400).json({ message: "User already exist, proceed to Login" })
   }
 
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  const newUser = new User({
+  const newUser = new Patient({
     firstName,
     lastName,
     username,
@@ -50,7 +50,7 @@ const login = async (req, res) => {
     const { email, password, role } = req.body
 
     // Find the user in the database
-    const user = await User.findOne({ email });
+    const user = await Patient.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
