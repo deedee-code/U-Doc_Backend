@@ -11,7 +11,7 @@ const router = express.Router();
 //   login,
 // } = require("../controller/ctrl");
 
-const { registerUser, login } = require("../controller/ctrl")
+const { registerUser, login, reset } = require("../controller/ctrl")
 
 
 router.post('/user/signup', registerUser)
@@ -21,6 +21,7 @@ router.post('/user/signup', registerUser)
 // router.put("/:id", update);
 // router.delete("/:id", deleteUser);
 router.post("/user/login", login);
+router.post("/user/passwordReset", reset)
 // router.post("/medics/signup", registerMedical)
 
 module.exports = router;
