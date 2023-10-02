@@ -1,5 +1,4 @@
 const express = require("express");
-const router = express.Router();
 
 // const {
 //   registerUser,
@@ -11,7 +10,9 @@ const router = express.Router();
 //   login,
 // } = require("../controller/ctrl");
 
-const { registerUser, login } = require("../controller/ctrl")
+const { registerUser, login, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount } = require("../controller/userController")
+
+const router = express.Router();
 
 
 router.post('/user/signup', registerUser)
@@ -22,5 +23,13 @@ router.post('/user/signup', registerUser)
 // router.delete("/:id", deleteUser);
 router.post("/user/login", login);
 // router.post("/medics/signup", registerMedical)
+router.put('/profile-details/:id', accountProfile)
+router.put('/login-details/:id', accountLogin)
+router.put('/notification/:id', accountNotification)
+router.get('/profile-picture/view/:id', profilePicture, viewProfilePicture)
+router.post('/profile-picture/edit/:id', profilePicture, editProfilePicture)
+router.delete('/profile-picture/delete/:id', profilePicture, deleteProfilePicture)
+router.put('/privacy-setting/:id', accountPrivacy)
+router.delete('/delete-account/:id', deleteAccount)
 
 module.exports = router;

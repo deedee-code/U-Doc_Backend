@@ -36,7 +36,91 @@ const patientSchema = new Schema(
         },
         role: {
             type: String,
-        }
+        },
+        address: {
+            type: String,
+        },
+        state: {
+            type: String,
+        },
+        profilePicture: {
+            type: String,
+        },
+        country: {
+            type: String
+        },
+        notificationChannel: {
+            email: {
+                type: Boolean,
+                default: false
+            },
+            phoneNumber: {
+                type: Boolean,
+                default: false
+            }
+        },
+        notificationOption: {
+            consultationBooking: {
+                type: Boolean,
+                default: false
+            },
+            consultationReminders: {
+                type: Boolean,
+                default: false
+            },
+            medicationReminders: {
+                type: Boolean,
+                default: false
+            },
+            medicationRefillReminders: {
+                type: Boolean,
+                default: false
+            },
+            newsletter: {
+                type: Boolean,
+                default: false
+            }
+        },
+        privacyPreferredDetails: {
+            allDetails: {
+                type: Boolean,
+                default: false
+            },
+            personalDetails: {
+                type: Boolean,
+                default: false
+            },
+            contentDetails: {
+                type: Boolean,
+                default: false
+            },
+            medicalRecords: {
+                type: Boolean,
+                default: false
+            },
+        },
+        medicalPersonnel: {
+            medicalDoctor: {
+                type: Boolean,
+                default: false
+            },
+            pharmacists: {
+                type: Boolean,
+                default: false
+            },
+            nurses: {
+                type: Boolean,
+                default: false
+            },
+            nutritionist: {
+                type: Boolean,
+                default: false
+            },
+            labScientist: {
+                type: Boolean,
+                default: false
+            }
+        },
     },
     {
         timestamps: true
