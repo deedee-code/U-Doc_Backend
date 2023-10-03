@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { registerMedicalProfessional } = require("../controllers/authController")
+const { registerMedicalProfessional, uploadFile } = require("../controllers/authController")
 
 
-router.post('/registerMedicalProfessional', registerMedicalProfessional)
+router.post('/registerMedicalProfessional', uploadFile, registerMedicalProfessional)
 
 
 module.exports = router;

@@ -1,12 +1,32 @@
 const Medics = require("../models/medicalProfessionalModel");
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+const path = require('path')
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'upload')
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, file.fieldname + '-' + uniqueSuffix + ext);
+  }
+})
+
+const uploadFile = multer({ storage: storage }).single('uploadFile')
+
+
 
 
 const registerMedicalProfessional = async (req, res) => {
 
-  const { firstName, lastName, gender, dateOfBirth, nationality, medicalPersonnel, employmentStatus, organization, qualification, uploadFile, street1, street2, city, state, postalCode, country, phoneNumber, email, password } = req.body;
+  const { firstName, lastName, gender, dateOfBirth, nationality, medicalPersonnel, employmentStatus, organization, qualification, street1, street2, city, state, postalCode, country, phoneNumber, email, password } = req.body;
+  const uploadFile = req.file ? req.file.path : undefined;
 
-  if (!firstName || !lastName || !gender || !dateOfBirth || !nationality || !medicalPersonnel || !employmentStatus || !organization || !qualification || !uploadFile || !street1 || !street2 || !city || !state || !postalCode || !country || !phoneNumber || !email || !password) {
+
+  if (!firstName || !lastName || !gender || !dateOfBirth || !nationality || !medicalPersonnel || !employmentStatus || !organization || !qualification || !street1 || !street2 || !city || !state || !postalCode || !country || !phoneNumber || !email || !password) {
     return res.status(400).json({ message: "All fields are required" })
   }
 
@@ -29,7 +49,6 @@ const registerMedicalProfessional = async (req, res) => {
     employmentStatus,
     organization, 
     qualification, 
-    uploadFile, 
     street1, 
     street2, 
     city, 
@@ -38,7 +57,8 @@ const registerMedicalProfessional = async (req, res) => {
     country, 
     phoneNumber, 
     email, 
-    password: hashedPassword
+    password: hashedPassword,
+    uploadFile
   })
   try {
     await newUser.save()
@@ -54,3 +74,4 @@ const registerMedicalProfessional = async (req, res) => {
 
 
 exports.registerMedicalProfessional = registerMedicalProfessional;
+exports.uploadFile = uploadFile;
