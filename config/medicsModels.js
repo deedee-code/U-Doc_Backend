@@ -59,18 +59,18 @@ const medicsSchema = new Schema(
         postalCode: {
           type: String
         },
-        country: {
-          type: String
-        },
-      phoneNumber: {
-        type: String,
-        required: true,
-        unique: true
+      country: {
+        type: String
       },
+      // phoneNumber: {
+      //   type: String,
+      //   required: true,
+      //   // unique: true
+      // },
       email: {
         type: String,
         required: true,
-        unique: true
+        // unique: true
       },
       password: {
         type: String,

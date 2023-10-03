@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require('mongoose');
-const paths = require("./routes/authroutes");
+const patients = require("./routes/patientRoutes");
 const dotenv = require("dotenv").config();
 const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 3000;
@@ -12,7 +12,7 @@ const mongoConn = process.env.MONGO_CONN;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/api/", paths);
+app.use("/api/", patients);
 
 mongoose.connect(mongoConn, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
