@@ -4,7 +4,6 @@ const Schema = mongoose.Schema
 
 const medicsSchema = new Schema(
   {
-    personalDetails: {
       firstName: {
         type: String,
         required: true
@@ -14,15 +13,17 @@ const medicsSchema = new Schema(
         required: true
       },
       gender: {
-        type: Boolean,
+        type: String,
+        required: true
+      },
+      dateOfBirth: {
+        type: String,
         required: true
       },
       nationality: {
         type: String,
         required: true
-      }
-    },
-    professionalDetails: {
+      },
       medicalPersonnel: {
         type: String,
         required: true
@@ -42,14 +43,11 @@ const medicsSchema = new Schema(
       uploadFile: {
         type: String,
         required: true
-      }
-    },
-    contactDetails: {
-      addres: {
-        line1: {
+      },
+        street1: {
           type: String
         },
-        line2: {
+        street2: {
           type: String
         },
         city: {
@@ -64,9 +62,6 @@ const medicsSchema = new Schema(
         country: {
           type: String
         },
-      }
-    },
-    loginDetails: {
       phoneNumber: {
         type: String,
         required: true,
@@ -80,10 +75,10 @@ const medicsSchema = new Schema(
       password: {
         type: String,
         required: true
-      }
+      },
     },
-  },
-  {
+    
+{
         timestamps: true
   }
 )
