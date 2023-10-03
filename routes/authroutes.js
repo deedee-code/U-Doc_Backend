@@ -10,7 +10,7 @@ const express = require("express");
 //   login,
 // } = require("../controller/ctrl");
 
-const { registerUser, login, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount } = require("../controller/userController")
+const { registerUser, login, sendCode, passwordReset, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount } = require("../controller/userController")
 
 const router = express.Router();
 
@@ -22,6 +22,8 @@ router.post('/user/signup', registerUser)
 // router.put("/:id", update);
 // router.delete("/:id", deleteUser);
 router.post("/user/login", login);
+router.post('/send-verification-code', sendCode)
+router.post("/reset-password", passwordReset)
 // router.post("/medics/signup", registerMedical)
 router.put('/profile-details/:id', accountProfile)
 router.put('/login-details/:id', accountLogin)

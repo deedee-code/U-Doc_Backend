@@ -7,6 +7,7 @@ const secretKey = process.env.SECRET_KEY || 'defaultSecretKey';
 require('dotenv').config();
 const multer = require('multer')
 const path = require('path')
+const nodemailer = require('nodemailer')
 
 
 const storage = multer.diskStorage({
@@ -22,6 +23,15 @@ const storage = multer.diskStorage({
 
 const profilePicture = multer({ storage: storage }).single('profilePicture')
 
+
+// Create a transporter for sending emails
+const transporter = nodemailer.createTransport({
+  service: 'Gmail', 
+  auth: {
+    user: 'mahletanbessie@gmail.com',
+    pass: '598600Mm@@',
+  },
+});
 
 
 
@@ -89,6 +99,87 @@ const login = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+// Forget Password, Verify OTP, Reset Password
+
+const sendCode = async (req, res) => {
+  try {
+    const { email } = req.body;
+    // Find the user with the provided email in the database
+    const user = await Patient.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Generate a unique verification code
+    const verificationCode = crypto.randomBytes(4).toString('hex');
+
+    // Save the verification code and its expiration time in the user's document in the database
+    user.verificationCode = verificationCode;
+    user.verificationCodeExpiration = Date.now() + 600000; // Expiration time set to 10 minutes
+    await user.save();
+
+    // Send the verification code to the user via email
+    const mailOptions = {
+      from: 'mahletanbessie@gmail.com',
+      to: email,
+      subject: 'Email Verification',
+      text: `Your verification code is: ${verificationCode}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Failed to send verification code email' });
+      }
+      console.log('Email sent:', info.response);
+      // Return a success message
+      return res.status(200).json({ message: 'Verification code sent' });
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
+
+const passwordReset = async (req, res) => {
+  try {
+    const { email, resetCode, newPassword } = req.body;
+    // Find the user with the provided email and reset code in the database
+    const user = await Patient.findOne({ email, resetCode });
+
+    if (!user) {
+      return res.status(404).json({ error: 'Invalid reset code' });
+    }
+
+    // Check if the reset code has expired
+    if (Date.now() > user.resetCodeExpiration) {
+      return res.status(400).json({ error: 'Reset code has expired' });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password in the database
+    user.password = hashedPassword;
+    // Reset the reset code and its expiration time
+    user.resetCode = undefined;
+    user.resetCodeExpiration = undefined;
+    await user.save();
+
+    // Return a success message
+    return res.status(200).json({ message: 'Password reset successful' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
 
 
 
@@ -508,4 +599,4 @@ app.get('/protected', authenticateToken, (req, res) => {
 
 
 // module.exports = { registerUser, createUser, getAllUsers, getaUser, update, deleteUser, login };
-module.exports = { registerUser, login, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount }
+module.exports = { registerUser, login, sendCode, passwordReset, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount }

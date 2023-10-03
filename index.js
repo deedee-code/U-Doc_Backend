@@ -14,7 +14,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/", paths);
 
-
 mongoose.connect(mongoConn, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Connected to MongoDB');
