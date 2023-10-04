@@ -1,4 +1,4 @@
-const Medics = require("../config/medicsModels");
+const MedicalPersonnel = require("../config/medicsModels");
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path')
@@ -30,21 +30,21 @@ const registerMedicalProfessional = async (req, res) => {
   //   return res.status(400).json({ message: "All fields are required" })
   // }
 
-  const user = await Medics.findOne({ email })
-  // if (user) {
-  //     return res.status(404).json({ message: "User already exist, proceed to Login"})
-  // }
-
+  const user = await MedicalPersonnel.findOne({ email })
   if (user) {
-    return res.status(409).json({ message: "User with the same email already exists, please use a different email"})
+      return res.status(404).json({ message: "User already exist, proceed to Login"})
   }
+
+  // if (user) {
+  //   return res.status(409).json({ message: "User with the same email already exists, please use a different  email"})
+  // }
 
 
 
   const hashedPassword = bcrypt.hashSync(password, 10)
 
 
-  const newUser = new Medics({
+  const newUser = new MedicalPersonnel({
     firstName,
     lastName,
     gender,  

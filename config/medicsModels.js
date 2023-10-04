@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 
-const medicsSchema = new Schema(
+const medicalPersonnelSchema = new Schema(
   {
       firstName: {
         type: String,
@@ -84,4 +84,4 @@ const medicsSchema = new Schema(
 )
 
 
-module.exports = mongoose.model('Medics', medicsSchema)
+module.exports = mongoose.model('MedicalPersonnel', medicalPersonnelSchema)
