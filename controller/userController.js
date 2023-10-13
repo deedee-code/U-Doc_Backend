@@ -7,7 +7,8 @@ const secretKey = process.env.SECRET_KEY || 'defaultSecretKey';
 require('dotenv').config();
 const multer = require('multer')
 const path = require('path')
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
+const { Console } = require('console');
 
 
 const storage = multer.diskStorage({
@@ -471,6 +472,29 @@ const deleteProfilePicture = async (req, res) => {
 };
 
 
+const getUser = async (req, res, next) => {
+  const userId = req.params.id;
+
+  if (!userId) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+
+  try {
+    const user = await Patient.findById(userId, "-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    return res.status(200).json({ firstName: user.firstName, lastName: user.lastName, username: user.username, email: user.email, dateOfBirth: user.dateOfBirth, phoneNumber: user.phoneNumber });
+
+  } catch (err) {
+    return res.status(500).json({ message: "Internal Server Error"})
+  }
+}
+
+
+
 
 // const createUser = async (req, res) => {
 //   const { email, password, role } = req.body;
@@ -599,4 +623,4 @@ app.get('/protected', authenticateToken, (req, res) => {
 
 
 // module.exports = { registerUser, createUser, getAllUsers, getaUser, update, deleteUser, login };
-module.exports = { registerUser, login, sendCode, passwordReset, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount }
+module.exports = { registerUser, login, sendCode, passwordReset, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount, getUser }
