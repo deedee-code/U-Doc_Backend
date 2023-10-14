@@ -7,8 +7,9 @@ const secretKey = process.env.SECRET_KEY || 'defaultSecretKey';
 require('dotenv').config();
 const multer = require('multer')
 const path = require('path')
-const nodemailer = require('nodemailer');
-const { Console } = require('console');
+const nodemailer = require('nodemailer')
+const bodyParser = require("body-parser");
+const crypto = require('crypto');
 
 
 const storage = multer.diskStorage({
@@ -30,7 +31,7 @@ const transporter = nodemailer.createTransport({
   service: 'Gmail', 
   auth: {
     user: 'mahletanbessie@gmail.com',
-    pass: '598600Mm@@',
+    pass: 'puji tuav lmhp hlya',
   },
 });
 
@@ -46,7 +47,7 @@ const registerUser = async (req, res) => {
 
   const user = await Patient.findOne({ email })
   if (user) {
-    return res.sttus(400).json({ message: "User already exist, proceed to Login" })
+    return res.status(400).json({ message: "User already exist, proceed to Login" })
   }
 
   const hashedPassword = await bcrypt.hash(password, 10)
@@ -155,6 +156,7 @@ const passwordReset = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({ error: 'Invalid reset code' });
+      console.log(error);
     }
 
     // Check if the reset code has expired
@@ -472,29 +474,6 @@ const deleteProfilePicture = async (req, res) => {
 };
 
 
-const getUser = async (req, res, next) => {
-  const userId = req.params.id;
-
-  if (!userId) {
-    return res.status(400).json({ message: "Invalid user ID" });
-  }
-
-  try {
-    const user = await Patient.findById(userId, "-password");
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    
-    return res.status(200).json({ firstName: user.firstName, lastName: user.lastName, username: user.username, email: user.email, dateOfBirth: user.dateOfBirth, phoneNumber: user.phoneNumber });
-
-  } catch (err) {
-    return res.status(500).json({ message: "Internal Server Error"})
-  }
-}
-
-
-
 
 // const createUser = async (req, res) => {
 //   const { email, password, role } = req.body;
@@ -623,4 +602,4 @@ app.get('/protected', authenticateToken, (req, res) => {
 
 
 // module.exports = { registerUser, createUser, getAllUsers, getaUser, update, deleteUser, login };
-module.exports = { registerUser, login, sendCode, passwordReset, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount, getUser }
+module.exports = { registerUser, login, sendCode, passwordReset, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount }

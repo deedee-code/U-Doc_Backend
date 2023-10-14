@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const cors = require('cors');
 const mongoose = require('mongoose');
 const patients = require("./routes/patientRoutes");
 const dotenv = require("dotenv").config();
@@ -9,9 +8,7 @@ const PORT = process.env.PORT || 3000;
 const mongoConn = process.env.MONGO_CONN;
 
 
-
 // Middleware to parse request bodies
-app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
