@@ -46,7 +46,7 @@ const registerUser = async (req, res) => {
 
   const user = await Patient.findOne({ email })
   if (user) {
-    return res.sttus(400).json({ message: "User already exist, proceed to Login" })
+    return res.status(400).json({ message: "User already exist, proceed to Login" })
   }
 
   const hashedPassword = await bcrypt.hash(password, 10)
@@ -68,7 +68,7 @@ const registerUser = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error"})
   }
 
-  return res.status(201).json({ message: "User successfully signed up", newUser})
+  return res.status(201).json({ message: "User successfully signed up", data: newUser})
 }
 
 
@@ -95,7 +95,7 @@ const login = async (req, res) => {
     console.log("Generated Token: ", token)
 
     // Return the token to the client
-    return res.status(200).json({ message: "User Successfully Logged In", token });
+    return res.status(200).json({ message: "User Successfully Logged In", data: {user, token} });
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error' });
   }
@@ -214,7 +214,7 @@ const accountProfile = async (req, res) => {
     }
 
 
-    return res.status(200).json({ message: "Profile Detailed successfully updated!", updateUser})
+    return res.status(200).json({ message: "Profile Detailed successfully updated!", data: updateUser})
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error"})
   }
@@ -313,7 +313,7 @@ const accountNotification = async (req, res) => {
 
     await user.save();
 
-    return res.status(201).json({ message: "Notification settings updated successfully", updateNotificationSettings})
+    return res.status(201).json({ message: "Notification settings updated successfully", data: updateNotificationSettings})
   } catch (error) {
     return res.status(500).json({ message: 'Failed to update notification settings' });
   }
@@ -363,7 +363,7 @@ const accountPrivacy = async (req, res) => {
 
     await user.save();
 
-    return res.status(201).json({ message: "Notification settings updated successfully", updatePrivacySettings})
+    return res.status(201).json({ message: "Notification settings updated successfully", data: updatePrivacySettings})
 
   } catch (error) {
     return res.status(500).json({ message: 'Failed to update privacy settings' });
@@ -409,7 +409,7 @@ const viewProfilePicture = async (req, res) => {
     }
 
         // Assuming userDP.profilePicture is a URL or path to the profile picture
-    return res.status(200).json({ profilePicture: user.profilePicture });
+    return res.status(200).json({ data: {profilePicture: user.profilePicture} });
   } catch (error) {
     return res.status(500).json({ message: 'Failed to retrieve profile picture' });
   }
@@ -486,7 +486,7 @@ const getUser = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
     
-    return res.status(200).json({ firstName: user.firstName, lastName: user.lastName, username: user.username, email: user.email, dateOfBirth: user.dateOfBirth, phoneNumber: user.phoneNumber });
+    return res.status(200).json({ data: {firstName: user.firstName, lastName: user.lastName, username: user.username, email: user.email, dateOfBirth: user.dateOfBirth, phoneNumber: user.phoneNumber} });
 
   } catch (err) {
     return res.status(500).json({ message: "Internal Server Error"})
@@ -623,4 +623,4 @@ app.get('/protected', authenticateToken, (req, res) => {
 
 
 // module.exports = { registerUser, createUser, getAllUsers, getaUser, update, deleteUser, login };
-module.exports = { registerUser, login, sendCode, passwordReset, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount, getUser }
+module.exports = { registerUser, login, sendCode, passwordReset, accountProfile, accountLogin, accountNotification, profilePicture, viewProfilePicture, editProfilePicture, deleteProfilePicture, accountPrivacy, deleteAccount, getUser, authenticateToken }
